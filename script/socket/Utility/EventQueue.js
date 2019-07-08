@@ -16,7 +16,7 @@ module.exports = class EventQueue {
     /**
         *Queue Msg
         *
-        * @param {string} infoQueue
+        * @param {Object} infoQueue
         */
     Enqueue(infoQueue) {
         this.queue.push(infoQueue);
@@ -26,7 +26,7 @@ module.exports = class EventQueue {
     /**
      *
      *
-     * @returns {string}
+     * @returns {Object}
      */
     Dequeue() {
         if (this.queueLength > 0) {
@@ -37,7 +37,7 @@ module.exports = class EventQueue {
 
             return preserveMsg;
         } else {
-            return "";
+            return null;
         }
     }
 
