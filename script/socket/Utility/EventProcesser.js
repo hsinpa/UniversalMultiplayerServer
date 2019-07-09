@@ -2,11 +2,14 @@
 const EventQueue = require("./EventQueue");
 const socket = require('socket.io');
 
+const EnvironmentComponent = require('../Component/EnvironmentComponent');
+
 //@ts-check
 module.exports = class EventProcesser {
 
     /**
      *Creates an instance of EventProcesser.
+     * @param {EnvironmentComponent} env
      * @param {SocketIO.Server} socketIO
      * @param {number} gameLoopFps
      */

@@ -3,24 +3,29 @@ let Flag = require("./FlagComponent");
 
 /**
  *
- *
+ * @module UserComponent
  * @class UserComponent
  */
 class UserComponent {
 
   /**
    *Creates an instance of UserComponent.
-   * @param {string} p_user_id
+   * @param {SocketIO.Socket} p_socket
    * @memberof UserComponent
    */
-  constructor(p_user_id) {
-    this._id = p_user_id;
+  constructor(p_socket, privilage) {
+    this._id = p_socket.id;
+    this.socket = p_socket;
+    
     this.name = "Anonymous";
     this.room_id = "";
 
     //Type Idle, InGame, InRoom
     this.type = Flag.UserStatus.Idle;
+
+    this.privilage = Flag.Privilage.User;
   }
+  
 }
 
 module.exports = UserComponent;
