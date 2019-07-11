@@ -1,18 +1,114 @@
 <html>
 <title>{{title}}</title>
-
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+</head>
 <body>
-<h1>HELLO WORLD</h1>
+<h1>Server Console</h1>
 
+<div class="data-console-panel">
+  <div class="data-console-inputArea">
+    <label>Create Room</label>
+    <input name="max_user_number" placeholder="Type here . . . " value="2" type="number"/>
+    <button id="console-createRoom" disabled>Submit</button>
+    <button id="console-findRoom">Find Room</button>
+
+  </div>
+  
+
+  <div class="data-console-display">
+    <div class="data-user-box">
+      <h3>Num 1 User</h3>
+      <img src="">
+    </div>
+    
+    <div class="data-user-box">
+      <h3>Num 1 User</h3>
+      <img src="">
+    </div>
+
+    <div class="data-user-box">
+        <h3>Num 1 User</h3>
+        <img src="">
+      </div>
+
+    <button id="data-console-disconnect">Disconnect</button>
+  </div>
+</div>
 
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
   var socket = io.connect();
+  let socket_id = "";
+
+  //Holder
+  let consoleDisplay = document.querySelector(".data-console-panel .data-console-display");
+  let hasJoinRoom = false;
+  let hasCreateRoom = false;
+
+  //Input, Button Variable
+  let maxUserInput = document.querySelector(".data-console-panel .data-console-inputArea input");
+  let createRoomBt = document.querySelector(".data-console-panel .data-console-inputArea #console-createRoom");
+  let findRoomBt = document.querySelector(".data-console-panel .data-console-inputArea #console-findRoom");
+  let disconnectBT = document.querySelector(".data-console-panel #data-console-disconnect");
+
+      disconnectBT.style.visibility="hidden";
+
+  let FindRoom = function(jsonString) {
+    socket.emit("CreateRoom", jsonString);
+    hasCreateRoom = true;
+  };
+
+  let DrawUserBox = function() {
+
+  }
+  setInterval(function() {
+    if (socket_id !== "" && hasJoinRoom && !hasCreateRoom) {
+      socket.emit("CastMessage", JSON.stringify({
+        "socket_id" : socket_id,
+        "position" : "(20, 20, 40)"
+      }));
+    }
+  }, 1000 / 100);
 
   socket.on('OnConnect', function (data) {
     console.log(data);
+    let connectJSON = JSON.parse(data);
+    socket_id = connectJSON["socket_id"];
+
+    createRoomBt.disabled = false;
+  });
+
+  socket.on('CastMessage', function (data) {
+    console.log("CastMessage : " + JSON.stringify(data));
+  });
+
+
+  socket.on('RoomInfoUpdate', function (data) {
+    console.log(data);
+    hasJoinRoom = true;
+  });
+
+  socket.on('ForceLeaveRoom', function () {
+    console.log("ForceLeaveRoom");
+    hasJoinRoom = false;
+  }); 
+
+  createRoomBt.addEventListener("click", function() {
+    if (maxUserInput.value !== "" || maxUserInput.value <= 0) {
+      FindRoom(JSON.stringify({
+        socket_id : socket_id,
+        room_capacity : maxUserInput.value
+      }));
+
+      createRoomBt.disabled = true;
+    }
+  });
+
+  findRoomBt.addEventListener("click", function() {
+    socket.emit("FindRoom");
   });
 
 </script>

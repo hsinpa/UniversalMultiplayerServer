@@ -1,0 +1,14 @@
+
+.data-console-display {
+    margin-top: 1rem;
+    text-align: center;
+}
+.data-user-box{
+    height : 10rem;
+    width: 4em;
+    display: inline-block;
+    margin: auto 2rem;
+    padding: 1rem 3rem;
+    border:  1px solid black;
+}
+

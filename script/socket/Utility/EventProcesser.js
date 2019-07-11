@@ -1,6 +1,7 @@
 'use strict';
 const EventQueue = require("./EventQueue");
-const socket = require('socket.io');
+const SocketIO = require('socket.io');
+const Flag = require("../Component/FlagComponent");
 
 const EnvironmentComponent = require('../Component/EnvironmentComponent');
 
@@ -39,19 +40,22 @@ module.exports = class EventProcesser {
     Update() {
         if (this.queueManager == null)
             return;
-        
+
         let queueLength = this.queueManager.Count();
 
         for (let i = 0 ; i < queueLength; i++) {
             let msgJSON = this.queueManager.Dequeue();
 
-            if (msgJSON != null && "socket_id" in msgJSON) {
+            if (msgJSON != null && Flag.SocketIOKey.socket_id in msgJSON) {
+                if (msgJSON[Flag.SocketIOKey.socket_id] in this.env.users) {
 
-                if (msgJSON["socket_id"] in this.env.users) {
-                    let user = this.env.users[msgJSON["socket_id"]];
-
+                    let user = this.env.users[msgJSON[Flag.SocketIOKey.socket_id]];
+                    //Broadcast to all room member, except sender
+                    if (user != null && user.room_id !== "" &&　user.room_id != null && user.socket != null)
+                        user.socket.to(user.room_id).emit(Flag.SocketIOEvent.CastMessage, msgJSON);
                 }
             }
         }
+        this.queueManager.Clear();
     }
 }

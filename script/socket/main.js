@@ -27,13 +27,13 @@ exports.listen = function(app) {
     const roomUtility = new RoomUtility(io,  env);
 
     io.sockets.on('connection', function (socket) {
-        SocketIO.Socket
         console.log(socket.id + " is connect");
 
         //Create User and push to lookup table
         const newUser = new UserComponent(socket);
-
         env.users[socket.id] = newUser;
+        roomUtility.RegisterNewUserEvent(newUser);
+
         //Send back basic server info when user first connected
         socket.emit("OnConnect", JSON.stringify({
                 socket_id : socket.id,
@@ -51,15 +51,17 @@ exports.listen = function(app) {
                 eventProcesser.queueManager.Enqueue( JSON.parse(data) );
             } catch (e) {
                 console.log("CastMessage Error , " + data);
-            }        
+            }
         });
         
         //When client discconected
         socket.on('disconnect', function () {
             console.log(socket.id + " is disconnect");
 
-            if (socket.id in env.users)
+            if (socket.id in env.users) {
+                roomUtility.LeaveRoom(env.users[socket.id]);
                 delete env.users[socket.id];
+            }
         });
 
     });

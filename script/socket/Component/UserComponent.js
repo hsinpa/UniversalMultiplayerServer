@@ -1,4 +1,5 @@
 let Flag = require("./FlagComponent");
+const SocketIO = require('socket.io');
 
 
 /**
@@ -7,7 +8,6 @@ let Flag = require("./FlagComponent");
  * @class UserComponent
  */
 class UserComponent {
-
   /**
    *Creates an instance of UserComponent.
    * @param {SocketIO.Socket} p_socket
@@ -16,7 +16,6 @@ class UserComponent {
   constructor(p_socket, privilage) {
     this._id = p_socket.id;
     this.socket = p_socket;
-    
     this.name = "Anonymous";
     this.room_id = "";
 
@@ -25,7 +24,6 @@ class UserComponent {
 
     this.privilage = Flag.Privilage.User;
   }
-  
 }
 
 module.exports = UserComponent;

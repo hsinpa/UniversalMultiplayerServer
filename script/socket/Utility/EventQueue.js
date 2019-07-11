@@ -11,6 +11,7 @@ module.exports = class EventQueue {
         this.queue = new Array(expect_queue_size);
         /** @private */
         this.queueLength = 0;
+        this.headIndex = 0;
     }
    
     /**
@@ -29,11 +30,10 @@ module.exports = class EventQueue {
      * @returns {Object}
      */
     Dequeue() {
-        if (this.queueLength > 0) {
-            this.queueLength --;
+        if (this.headIndex < this.queueLength) {
             
-            let preserveMsg = this.queue[0];
-            this.queue.splice(0, 1);
+            let preserveMsg = this.queue[this.headIndex];
+            this.headIndex++;
 
             return preserveMsg;
         } else {
@@ -46,7 +46,8 @@ module.exports = class EventQueue {
     }
 
     Clear() {
-       this.queue.Clear();
+       this.queue.length = 0;
        this.queueLength = 0;
+       this.headIndex = 0;
     }
 }

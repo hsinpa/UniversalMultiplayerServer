@@ -16,6 +16,13 @@ const SocketIOKey = {
     roomCapacity : "room_capacity"
 }
 
+const SocketIOEvent = {
+    FindRoom : "FindRoom",
+    RoomInfoUpdate : "RoomInfoUpdate",
+    ForceLeaveRoom : "ForceLeaveRoom",
+    CastMessage : "CastMessage"
+}
+
 /**
  * @type {{Admin: number, User: number}}
  */
@@ -24,7 +31,6 @@ const Privilage = {
     User : 1
 }
 
-
 /**
  * @type {{Idle: number, InGame: number}}
  */
@@ -32,4 +38,4 @@ const RoomStatus = {
     Idle : 0,
     InGame : 1,
 }
-module.exports = {UserStatus, SocketIOKey, Privilage, RoomStatus};
+module.exports = {UserStatus, SocketIOKey, SocketIOEvent, Privilage, RoomStatus};
