@@ -32,6 +32,6 @@ var io = require('./script/socket/main').listen(server);
 rootRouter(router);
 
 //"192.168.0.86"
-server.listen(env.NODE_PORT || 3010, '192.168.1.190', function () {
+server.listen(env.NODE_PORT || 3010, 'localhost', function () {
   console.log(`Application worker ${process.pid} started...`);
 });
