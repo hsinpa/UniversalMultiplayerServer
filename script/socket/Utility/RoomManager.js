@@ -27,7 +27,6 @@ class RoomManager {
         let self = this;
         user.socket.on(Flag.SocketIOEvent.FindRoom, function() {
             let validRoom = self.FindRoomWithSpace();
-            console.log(validRoom);
             if (validRoom != null) {
                 self.AssignUserToRoom(validRoom, user);
             }
@@ -64,7 +63,7 @@ class RoomManager {
             const requestJSON = JSON.parse(rawData);
             let userID = requestJSON[Flag.SocketIOKey.socket_id]
             let room_capacity = requestJSON[Flag.SocketIOKey.roomCapacity]
-            console.log("Room capacity " + room_capacity);
+            
             if (userID in this.env.users) {
                 let user = this.env.users[userID];
                 let newRoom = new RoomComponent(userID, room_capacity);

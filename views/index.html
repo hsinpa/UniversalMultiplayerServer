@@ -7,38 +7,31 @@
 <h1>Server Console</h1>
 
 <div class="data-console-panel">
-  <div class="data-console-inputArea">
-    <label>Create Room</label>
-    <input name="max_user_number" placeholder="Type here . . . " value="2" type="number"/>
-    <button id="console-createRoom" disabled>Submit</button>
-    <button id="console-findRoom">Find Room</button>
-
-  </div>
   
 
   <div class="data-console-display">
-    <div class="data-user-box">
+    <!-- <div class="data-user-box">
+      <img src="sprite/Online ICON.png">
       <h3>Num 1 User</h3>
-      <img src="">
-    </div>
-    
-    <div class="data-user-box">
-      <h3>Num 1 User</h3>
-      <img src="">
-    </div>
-
-    <div class="data-user-box">
-        <h3>Num 1 User</h3>
-        <img src="">
-      </div>
-
-    <button id="data-console-disconnect">Disconnect</button>
+    </div> -->
   </div>
+
+  <div class="data-console-inputArea">
+    <!-- <label>Create Room with capacity</label> -->
+    <!-- <input name="max_user_number" placeholder="Type here . . . " value="2" type="number"/> -->
+    <button id="console-createRoom" disabled>Create Server</button>
+    <button id="data-console-disconnect">Disconnect</button>
+    <!-- <button id="console-findRoom">Find Room</button> -->
+  </div>
+
 </div>
 
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="javascript/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="javascript/UserViewCtrl.js"></script>
+
 <script type="text/javascript">
   var socket = io.connect();
   let socket_id = "";
@@ -49,29 +42,29 @@
   let hasCreateRoom = false;
 
   //Input, Button Variable
-  let maxUserInput = document.querySelector(".data-console-panel .data-console-inputArea input");
+  // let maxUserInput = document.querySelector(".data-console-panel .data-console-inputArea input");
   let createRoomBt = document.querySelector(".data-console-panel .data-console-inputArea #console-createRoom");
   let findRoomBt = document.querySelector(".data-console-panel .data-console-inputArea #console-findRoom");
   let disconnectBT = document.querySelector(".data-console-panel #data-console-disconnect");
+  let consoleDisplayView = $(".data-console-panel .data-console-display");
 
       disconnectBT.style.visibility="hidden";
 
-  let FindRoom = function(jsonString) {
+  let CreateRoom = function(jsonString) {
     socket.emit("CreateRoom", jsonString);
     hasCreateRoom = true;
+    console.log(consoleDisplayView);
+    RenderUserComp(10, 0, consoleDisplayView)
   };
 
-  let DrawUserBox = function() {
-
-  }
-  setInterval(function() {
-    if (socket_id !== "" && hasJoinRoom && !hasCreateRoom) {
-      socket.emit("CastMessage", JSON.stringify({
-        "socket_id" : socket_id,
-        "position" : "(20, 20, 40)"
-      }));
-    }
-  }, 1000 / 100);
+  // setInterval(function() {
+  //   if (socket_id !== "" && hasJoinRoom && !hasCreateRoom) {
+  //     socket.emit("CastMessage", JSON.stringify({
+  //       "socket_id" : socket_id,
+  //       "position" : "(20, 20, 40)"
+  //     }));
+  //   }
+  // }, 1000 / 100);
 
   socket.on('OnConnect', function (data) {
     console.log(data);
@@ -89,6 +82,12 @@
   socket.on('RoomInfoUpdate', function (data) {
     console.log(data);
     hasJoinRoom = true;
+    try {
+      let connectJSON = JSON.parse(data);
+      RenderUserComp(10, connectJSON["user_num"], consoleDisplayView)
+    } catch(e) {
+      
+    }
   });
 
   socket.on('ForceLeaveRoom', function () {
@@ -97,19 +96,24 @@
   }); 
 
   createRoomBt.addEventListener("click", function() {
-    if (maxUserInput.value !== "" || maxUserInput.value <= 0) {
-      FindRoom(JSON.stringify({
+    let maxUserNum = 10;
+    // if (maxUserInput.value !== "" || maxUserInput.value <= 0) {
+      CreateRoom(JSON.stringify({
         socket_id : socket_id,
-        room_capacity : maxUserInput.value
+        room_capacity : maxUserNum
       }));
 
       createRoomBt.disabled = true;
-    }
+    //}
   });
-
-  findRoomBt.addEventListener("click", function() {
+  
+  var FindRoom = function() {
     socket.emit("FindRoom");
-  });
+  }
+
+  // findRoomBt.addEventListener("click", function() {
+  //   FindRoom();
+  // });
 
 </script>
 </html>

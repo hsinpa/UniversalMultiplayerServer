@@ -1,14 +1,50 @@
 
+h1 {
+    color: antiquewhite;
+    text-align: center;
+}
+
 .data-console-display {
     margin-top: 1rem;
-    text-align: center;
+    text-align: left;
 }
 .data-user-box{
     height : 10rem;
-    width: 4em;
+    width: 5em;
     display: inline-block;
     margin: auto 2rem;
-    padding: 1rem 3rem;
-    border:  1px solid black;
+    padding: 2rem 4rem;
+    background-image: url("../sprite/RED.png");
+    text-align: center;
+
 }
 
+.data-user-box img {
+    display: inline;
+    width: 5em;
+}
+
+.data-console-inputArea {
+    padding: 2em 0em;
+    margin: 0 auto;
+    width: 5em;
+}
+
+.data-console-inputArea #console-createRoom {
+    background-color: aqua;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    max-width: 10rem;
+    font-size: 1rem;
+}
+
+.data-console-inputArea #console-createRoom:hover {
+    background-color: aquamarine;
+}
+
+body {
+    background-image: url("../sprite/BG.png");
+
+}

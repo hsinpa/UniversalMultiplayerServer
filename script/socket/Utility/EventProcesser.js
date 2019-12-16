@@ -52,7 +52,7 @@ module.exports = class EventProcesser {
                     let user = this.env.users[msgJSON[Flag.SocketIOKey.socket_id]];
                     //Broadcast to all room member, except sender
                     if (user != null && user.room_id !== "" &&　user.room_id != null && user.socket != null)
-                        user.socket.to(user.room_id).emit(Flag.SocketIOEvent.CastMessage, msgJSON);
+                        user.socket.to(user.room_id).emit(Flag.SocketIOEvent.CastMessage, JSON.stringify( msgJSON));
                 }
             }
         }
